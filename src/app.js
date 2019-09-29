@@ -114,8 +114,25 @@ app.post('/user', (req, res) => {
 
 app.delete('/user/:userID', (req, res) => {
     const { userId } = req.params;
-    console.log(userId);
-    res.send(`Got it`);
+
+    const index = users.findIndex(u => u.id === userId);
+
+    if (index === -1) {
+        return res
+            .status(404)
+            .send('User not found');
+    }
+
+    users.splice(index, 1);    
+
+    res
+        .status(204)
+        .end();
+})
+
+app.get('/user', (req, res) => {
+    res
+        .json(users);
 })
 
 app.use(function errorHandler(error, req, res, next) {
